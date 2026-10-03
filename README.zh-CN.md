@@ -6,8 +6,6 @@
 
 **[下载 Windows x64 版本](https://github.com/zixi526526/anki-grip/releases/latest)**
 
-1.5.0 是首个公开发布的二进制版本。Windows x64 ZIP 是完整发布包，内含许可证、运行时信息和 SHA-256 校验清单。
-
 ## 开始使用
 
 1. 从 Releases 下载 Windows x64 ZIP，解压整个文件夹。保留里面的许可证文件，然后运行 `anki-grip.exe`。不需要安装 Python。
