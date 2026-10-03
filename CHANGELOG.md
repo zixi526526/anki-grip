@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.5.0rc1 — unreleased / 未发布
+## 1.5.0 — 2026-10-03
 
 - English and Simplified Chinese interface with a system-language option. Live
   switching preserves unsaved settings; language is included in personal defaults.
@@ -15,12 +15,14 @@
   Ambiguous multi-modifier chords do not choose an action.
 - Public-facing bilingual documentation, release checklist, test CI and a manual
   Windows build-artifact workflow. Runtime versions and checksums accompany builds.
-- Existing bindings and preferences remain compatible. Windows packaging and live
-  controller validation for this candidate are pending.
+- New installations use standard rating shortcut labels. Saved preferences,
+  including reversed labels, remain unchanged.
+- First public Windows x64 release with bilingual documentation and a complete
+  dependency/license bundle. Local candidate controller/Anki use was accepted.
 
 中文：增加中英文/跟随系统切换，完整手柄实时图与暂停操作的测试页，开放 View/Menu
-及肩键/扳机之间的组合键，补充双语发布文档和 CI。旧配置保留；本候选版尚待 Windows
-打包和真实手柄验收。
+及肩键/扳机之间的组合键，发布首个 Windows x64 安装包。新配置使用常规评分标签；已有
+配置和个人偏好保留。README 以功能、支持输入及下载/使用为主。
 
 ## 1.4.0 — 2026-10-02
 

@@ -1,4 +1,4 @@
-name: Windows candidate artifact
+name: Windows release bundle
 
 on:
   workflow_dispatch:
@@ -28,17 +28,19 @@ jobs:
         shell: pwsh
         run: |
           foreach ($language in @('en', 'zh_CN')) {
-            $preview = Join-Path $env:RUNNER_TEMP "anki-grip-$language.png"
-            $exe = Join-Path $env:RUNNER_TEMP 'anki-grip-release/anki-grip.exe'
-            $arguments = '--language {0} --screenshot "{1}" --screenshot-tab 3 --demo-controller' -f $language, $preview
-            $process = Start-Process -FilePath $exe -ArgumentList $arguments -PassThru
-            if (-not $process.WaitForExit(30000)) { $process.Kill(); throw 'Offline GUI timed out.' }
-            $process.Refresh()
-            if ($process.ExitCode -ne 0 -or -not (Test-Path -LiteralPath $preview)) { throw 'Offline GUI failed.' }
+            foreach ($tab in @(0, 3)) {
+              $preview = Join-Path $env:RUNNER_TEMP "anki-grip-$language-$tab.png"
+              $exe = Join-Path $env:RUNNER_TEMP 'anki-grip-release/anki-grip.exe'
+              $arguments = '--language {0} --screenshot "{1}" --screenshot-tab {2} --demo-controller' -f $language, $preview, $tab
+              $process = Start-Process -FilePath $exe -ArgumentList $arguments -PassThru
+              if (-not $process.WaitForExit(30000)) { $process.Kill(); throw 'Offline GUI timed out.' }
+              $process.Refresh()
+              if ($process.ExitCode -ne 0 -or -not (Test-Path -LiteralPath $preview)) { throw 'Offline GUI failed.' }
+            }
           }
       - uses: actions/upload-artifact@v7
         with:
-          name: anki-grip-windows-candidate
+          name: anki-grip-windows-build
           path: ${{ runner.temp }}/anki-grip-release/
           if-no-files-found: error
       - uses: actions/upload-artifact@v7

@@ -60,7 +60,7 @@ def rating_keys(order: str) -> dict[str, str]:
 
 def default_config() -> dict:
     return {"schema": 2, "bindings": {key: value[2] for key, value in ACTIONS.items()},
-            "language": "auto", "order": "reverse", "vibration": True, "strength": 35,
+            "language": "auto", "order": "standard", "vibration": True, "strength": 35,
             "anki_feedback": True, "foreground_only": True, "controller": -1, "minimize_to_tray": True}
 
 

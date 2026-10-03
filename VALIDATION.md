@@ -1,31 +1,33 @@
-# Validation — 1.5.0rc1
+# Validation — 1.5.0
 
-## Observed checks
+## Release coverage
 
-- 92 automated application tests passed on Linux with Python 3.14.7 and PySide6
-  6.11.2, and Windows 11 with Python 3.14.4 and PySide6 6.11.2. Tests use isolated
-  settings and synthetic input/fake Anki objects; they do not grade a user collection.
-- Coverage includes all 24 standard XInput logical controls, ordered chords and
-  ambiguity rejection, input edge/center/reconnect guards, scrolling, language
-  persistence, preserved unsaved edits, controller rendering, disconnect reset,
-  test-page action suppression and package checksums.
-- Bridge feedback tests cover completed semantic ratings, asynchronous Undo,
-  Show/replay, rejected and expired commands, late/duplicate completion, foreground
-  and disabled guards, scroll rate limiting, focus and mouse transparency, bounded
-  placement, and timer hiding.
-- Windows packaging passed with PyInstaller 6.22.3. English and Simplified Chinese
-  Settings and Controller Test previews rendered and exited successfully. License
-  files, runtime metadata and the SHA-256 manifest were checked.
-- The project owner accepted normal live controller/Anki use on Windows on
-  2026-10-03. Existing personal settings were preserved. This is a local acceptance
-  result, not coverage of every controller, transport, scaling or Anki version.
+The application test suite has 96 checks. It covers controller edges and chords,
+semantic Anki actions, stale/foreground/busy guards, scrolling, language switching,
+controller rendering and action feedback. New checks verify standard labels for
+fresh settings and preserve saved reversed profiles without rewriting them.
 
-## Publication scope and remaining coverage
+The suite uses isolated settings and synthetic input/fake Anki objects; it does
+not grade a user's collection. Linux validation passed with Python 3.14.7 and
+PySide6 6.11.2. The public CI matrix runs Linux and Windows with Python 3.13/3.14.
+Windows release automation builds the exported source and exercises the packaged
+executable in English and Simplified Chinese on Mappings and Controller Test.
 
-This repository contains reviewed source with an independent history. It provides
-no prebuilt public binary release yet. Build from source using the README.
+The earlier 1.5.0rc1 build was packaged and accepted by the project owner for normal
+live controller/Anki use on Windows. The 1.5.0 changes set the new-profile label
+default, preserve existing preferences and improve the release documentation and
+packaging checks; they do not change the semantic review action protocol.
 
-Clean-machine operation without Python, all display scaling levels, transport and
-controller combinations, additional Anki versions, and full isolated-profile
-failure scenarios remain on the [release checklist](docs/RELEASE_CHECKLIST.md).
-Do not treat a successful synthetic test suite as hardware compatibility proof.
+## Package evidence
+
+[Releases](https://github.com/zixi526526/anki-grip/releases) provides the tagged
+Windows x64 package, checksums and build links. Each bundle includes
+`build-info.json`, `SHA256SUMS.txt`, dependency notices, license texts and
+`DEPENDENCY_SOURCES.md` with the upstream library sources and rebuild directions.
+
+## Remaining coverage
+
+An exhaustive controller/transport/Anki-version matrix, all display-scaling
+levels and a clean-machine test without Python have not been established.
+See the [coverage checklist](docs/RELEASE_CHECKLIST.md). Synthetic tests and a
+Windows package smoke test are not proof of every hardware combination.

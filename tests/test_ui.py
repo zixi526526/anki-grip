@@ -28,11 +28,27 @@ class UiTests(unittest.TestCase):
         self.window.quitting = True
         self.window.close()
 
-    def test_custom_rating_labels_and_defaults(self):
-        self.assertEqual([self.window.key_labels[key].text() for key in ("easy", "good", "hard", "again")], ["1", "2", "3", "4"])
+    def test_standard_rating_labels_and_defaults(self):
+        self.assertEqual(self.window.order_combo.currentData(), "standard")
+        self.assertEqual([self.window.key_labels[key].text() for key in ("again", "hard", "good", "easy")], ["1", "2", "3", "4"])
         self.assertFalse(self.window.dirty())
         self.assertEqual(self.window.key_labels["space"].text(), "␣")
         self.assertEqual(self.window.mapping_combos["space"].currentData(), "")
+
+    def test_saved_reverse_profile_is_loaded_by_value(self):
+        saved = default_config()
+        saved["order"] = "reverse"
+        with patch("grip.ui.load_config", return_value=saved):
+            window = MainWindow(offline=True)
+        try:
+            self.assertEqual(window.order_combo.currentData(), "reverse")
+            self.assertEqual([window.key_labels[key].text()
+                              for key in ("easy", "good", "hard", "again")],
+                             ["1", "2", "3", "4"])
+            self.assertFalse(window.dirty())
+        finally:
+            window.quitting = True
+            window.close()
 
     def prepare_review(self, state):
         self.window.worker = Mock()
@@ -190,7 +206,7 @@ class UiTests(unittest.TestCase):
     def test_restore_defaults_recovers_entire_saved_profile(self):
         defaults = default_config()
         defaults.update(strength=32, vibration=False, anki_feedback=False, foreground_only=False,
-                        controller=2, order="standard", minimize_to_tray=False)
+                        controller=2, order="reverse", minimize_to_tray=False)
         defaults["bindings"].update(show="", space="LSTICK_DOWN")
         with patch("grip.ui.load_defaults", return_value=defaults):
             self.window.restore_defaults()

@@ -1,3 +1,4 @@
+import ast
 import hashlib
 import json
 import tempfile
@@ -10,6 +11,17 @@ from tools.artifact_manifest import write_manifest
 
 
 class ArtifactTests(unittest.TestCase):
+    def test_application_and_bridge_versions_match(self):
+        root = Path(__file__).resolve().parents[1]
+        manifest = json.loads((root / "addon/anki_grip_bridge/manifest.json").read_text(encoding="utf-8"))
+        tree = ast.parse((root / "addon/anki_grip_bridge/__init__.py").read_text(encoding="utf-8"))
+        app = next(ast.literal_eval(node.value) for node in tree.body
+                   if isinstance(node, ast.Assign)
+                   and any(isinstance(target, ast.Name) and target.id == "APP"
+                           for target in node.targets))
+        self.assertEqual(manifest["version"], __version__)
+        self.assertEqual(app["version"], __version__)
+
     def test_checksums_cover_the_complete_bundle_and_detect_changes(self):
         with tempfile.TemporaryDirectory() as directory:
             output = Path(directory)
@@ -22,11 +34,12 @@ class ArtifactTests(unittest.TestCase):
                 write_manifest(output)
             self.assertEqual(first, (output / "SHA256SUMS.txt").read_text())
             checksums = dict(line.split("  ", 1)[::-1] for line in first.splitlines())
-            self.assertEqual(set(checksums), {"anki-grip.exe", "licenses/NOTICE.txt", "build-info.json"})
+            self.assertEqual(set(checksums), {"anki-grip.exe", "licenses/NOTICE.txt", "build-info.json", "DEPENDENCY_SOURCES.md"})
             for name, digest in checksums.items():
                 self.assertEqual(digest, hashlib.sha256((output / name).read_bytes()).hexdigest())
             (output / "anki-grip.exe").write_bytes(b"changed executable")
             self.assertNotEqual(checksums["anki-grip.exe"], hashlib.sha256((output / "anki-grip.exe").read_bytes()).hexdigest())
             metadata = json.loads((output / "build-info.json").read_text())
             self.assertEqual(metadata["version"], __version__)
+            self.assertEqual(metadata["default_rating_order"], "standard")
             self.assertNotIn(directory, json.dumps(metadata))

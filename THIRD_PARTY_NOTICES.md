@@ -17,10 +17,17 @@ You can rebuild it from source with modified compatible libraries using `build.p
   distribution of bundled applications under their own licenses.
   https://pyinstaller.org/en/stable/license.html
 
-The release folder includes the available license texts shipped with these
-dependencies. Dependency licenses govern their respective components.
+The release folder includes the license texts shipped with these dependencies.
+`DEPENDENCY_SOURCES.md` in each binary bundle provides version-specific upstream
+source archives and rebuild instructions, including use of modified compatible
+Qt/PySide libraries. Dependency licenses govern their respective components.
 
 The original controller diagram is drawn by project-owned QPainter primitives.
 Emulator projects listed in the design references provided behavioral inspiration
 only; their source code, assets and trademarks are not bundled. Review the actual
 release license bundle and applicable Qt/PySide obligations before distribution.
+
+Qt/PySide license texts and upstream third-party notices are retained verbatim
+from the matching official source archives under `licenses/vendor-notices/`.
+Their source URLs and archive hashes are in `PROVENANCE.json`. These reference
+notices do not change the MIT license on project-authored application code.

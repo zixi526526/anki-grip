@@ -8,7 +8,8 @@ Do not read or edit the user's collection or unrelated add-ons. Install only
 isolated throwaway profile; do not test real reviews against a user's collection.
 
 Ratings are semantic: Again=1, Hard=2, Good=3, Easy=4. Shortcut labels are a
-separate configurable presentation setting. Preserve existing profiles and migrate
+separate configurable presentation setting, standard for new installations.
+Preserve existing profiles and migrate
 only exact legacy defaults. Load vibration strength from saved settings.
 
 Bridge commands require the current review revision/session. Run Anki operations

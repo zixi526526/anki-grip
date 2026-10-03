@@ -49,6 +49,25 @@ class MappingTests(unittest.TestCase):
         self.mapper.step(set())
         self.assertEqual(self.mapper.step({"DPAD_UP"}), ["easy"])
 
+    def test_fresh_settings_use_standard_labels(self):
+        with tempfile.TemporaryDirectory() as directory:
+            with patch("grip.model.config_dir", return_value=Path(directory)):
+                config = load_config()
+                self.assertEqual(config["order"], "standard")
+                self.assertEqual(rating_keys(config["order"]),
+                                 {"again": "1", "hard": "2", "good": "3", "easy": "4"})
+
+    def test_saved_reverse_labels_survive_upgrade_without_rewriting_files(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "settings.json"
+            config = default_config()
+            config["order"] = "reverse"
+            config["bindings"]["good"] = "A"
+            save_config(config, path)
+            before = path.read_bytes()
+            self.assertEqual(load_config(path), config)
+            self.assertEqual(path.read_bytes(), before)
+
     def test_new_binding(self):
         config = default_config()
         config["bindings"]["easy"] = "X"
@@ -82,7 +101,7 @@ class MappingTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temp:
             config = default_config()
             config["bindings"].update(show="", space="LSTICK_DOWN")
-            config.update(strength=32, vibration=False, controller=2)
+            config.update(strength=32, vibration=False, controller=2, order="reverse")
             path = Path(temp) / "defaults.json"
             save_defaults(config, path)
             self.assertEqual(load_defaults(path), config)

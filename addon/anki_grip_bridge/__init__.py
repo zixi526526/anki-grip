@@ -12,7 +12,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from aqt import gui_hooks, mw
 from aqt.qt import QApplication, QLabel, QTimer, Qt
 
-APP = {"app": "anki-grip", "protocol": 1, "version": "1.5.0rc1"}
+APP = {"app": "anki-grip", "protocol": 1, "version": "1.5.0"}
 PORT = int(os.environ.get("ANKI_GRIP_PORT", "18765"))
 EASES = {"again": 1, "hard": 2, "good": 3, "easy": 4}
 

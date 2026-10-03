@@ -1,7 +1,8 @@
-# Release checklist / 发布清单
+# Coverage checklist / 验证覆盖清单
 
-Source candidate: **1.5.0rc1**. Source availability and binary releases are tracked
-separately. This checklist does not itself authorize a version bump or release.
+Version: **1.5.0**. The first Windows x64 release is published with a tagged source
+snapshot and package checksums. This page records tested scope and follow-ups;
+unchecked cases remain outside the established coverage.
 
 ## Completed preparation
 
@@ -15,7 +16,7 @@ separately. This checklist does not itself authorize a version bump or release.
 - [x] README, install/update/uninstall guidance, contribution instructions and MIT source license.
 - [x] CI test matrix and an explicitly triggered Windows candidate-artifact workflow.
 
-## Before a public binary
+## Additional coverage
 
 - [ ] Run the package on a clean Windows 11 x64 machine without Python; verify tray,
   restart, installation, upgrade and uninstall at 100%, 125%, 150% and 200% scaling.
@@ -28,9 +29,9 @@ separately. This checklist does not itself authorize a version bump or release.
   focus/mouse handling, failed-command suppression and coexistence with Anki alerts.
 - [ ] Verify entering/leaving Controller Test with controls held requires release
   before actions resume. Check preserved custom settings and incompatible bridges.
-- [ ] Review the actual dependency/license bundle and applicable Qt/PySide obligations.
-- [ ] Agree on the release version, build the exported source, verify metadata and
-  checksums, and publish the complete ZIP with release notes.
+- [x] Supply the dependency license texts, upstream sources and compatible-library rebuild directions with the package.
+- [x] Select 1.5.0 for the first public release; build the exported source, verify
+  package metadata/checksums and publish the complete ZIP with release notes.
 
 ## Design references
 

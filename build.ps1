@@ -48,17 +48,22 @@ try {
     $licenseRoot = Join-Path $OutputPath 'licenses'
     New-Item -ItemType Directory -Path $licenseRoot -Force | Out-Null
     $packagesRoot = Join-Path $VenvPath 'Lib\site-packages'
-    foreach ($package in @('pyside6_essentials-6.11.2.dist-info', 'shiboken6-6.11.2.dist-info', 'pyinstaller-6.22.3.dist-info')) {
-        $sourceLicenses = Join-Path $packagesRoot "$package\licenses"
-        if (Test-Path -LiteralPath $sourceLicenses) {
-            Copy-Item -LiteralPath $sourceLicenses -Destination (Join-Path $licenseRoot $package) -Recurse -Force
-        }
+    # Qt wheels do not include a licenses/ directory. Bundle notices from the
+    # matching official source archives kept under licenses/vendor-notices.
+    $qtNotices = Join-Path $PSScriptRoot 'licenses\vendor-notices'
+    foreach ($required in @('qtbase\LICENSES\LGPL-3.0-only.txt', 'qtbase\LICENSES\GPL-3.0-only.txt', 'pyside-shiboken\LICENSES\LGPL-3.0-only.txt')) {
+        if (-not (Test-Path -LiteralPath (Join-Path $qtNotices $required))) { throw "Qt license missing: $required" }
     }
+    Copy-Item -LiteralPath $qtNotices -Destination (Join-Path $licenseRoot 'qt-vendor-notices') -Recurse -Force
+    $installerLicenses = Join-Path $packagesRoot 'pyinstaller-6.22.3.dist-info\licenses'
+    if (-not (Test-Path -LiteralPath $installerLicenses) -or -not @(Get-ChildItem -LiteralPath $installerLicenses -Recurse -File).Count) {
+        throw 'PyInstaller license files missing.'
+    }
+    Copy-Item -LiteralPath $installerLicenses -Destination (Join-Path $licenseRoot 'pyinstaller') -Recurse -Force
     $pythonBase = & $pythonPath -c 'import sys; print(sys.base_prefix)'
     $pythonLicense = Join-Path $pythonBase 'LICENSE.txt'
-    if (Test-Path -LiteralPath $pythonLicense) {
-        Copy-Item -LiteralPath $pythonLicense -Destination (Join-Path $licenseRoot 'cpython-license.txt') -Force
-    }
+    if (-not (Test-Path -LiteralPath $pythonLicense)) { throw 'CPython license file missing.' }
+    Copy-Item -LiteralPath $pythonLicense -Destination (Join-Path $licenseRoot 'cpython-license.txt') -Force
     & $pythonPath (Join-Path $PSScriptRoot 'tools\artifact_manifest.py') $OutputPath
     if ($LASTEXITCODE -ne 0) { throw 'Could not generate runtime metadata and checksums.' }
 }
