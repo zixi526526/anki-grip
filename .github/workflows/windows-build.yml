@@ -1,0 +1,47 @@
+name: Windows candidate artifact
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: windows-latest
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+      - name: Isolate build settings
+        shell: pwsh
+        run: '"LOCALAPPDATA=$env:RUNNER_TEMP/anki-grip-build-settings" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append'
+      - name: Build and run tests
+        shell: pwsh
+        run: ./build.ps1 -BuildRoot "$env:RUNNER_TEMP/anki-grip-build" -OutputPath "$env:RUNNER_TEMP/anki-grip-release"
+      - name: Smoke test packaged executable offline
+        shell: pwsh
+        run: |
+          foreach ($language in @('en', 'zh_CN')) {
+            $preview = Join-Path $env:RUNNER_TEMP "anki-grip-$language.png"
+            $exe = Join-Path $env:RUNNER_TEMP 'anki-grip-release/anki-grip.exe'
+            $arguments = '--language {0} --screenshot "{1}" --screenshot-tab 3 --demo-controller' -f $language, $preview
+            $process = Start-Process -FilePath $exe -ArgumentList $arguments -PassThru
+            if (-not $process.WaitForExit(30000)) { $process.Kill(); throw 'Offline GUI timed out.' }
+            $process.Refresh()
+            if ($process.ExitCode -ne 0 -or -not (Test-Path -LiteralPath $preview)) { throw 'Offline GUI failed.' }
+          }
+      - uses: actions/upload-artifact@v7
+        with:
+          name: anki-grip-windows-candidate
+          path: ${{ runner.temp }}/anki-grip-release/
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v7
+        with:
+          name: anki-grip-offline-previews
+          path: ${{ runner.temp }}/anki-grip-*.png
