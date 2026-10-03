@@ -6,6 +6,10 @@
 
 **[下载 Windows x64 版本](https://github.com/zixi526526/anki-grip/releases/latest)**
 
+![按键映射页：Anki 复习功能与实时手柄状态](docs/images/mappings-zh-CN.png)
+
+*按键映射与侧栏实时手柄图。截图来自 Windows 版实际界面，手柄输入为演示数据。*
+
 ## 开始使用
 
 1. 从 Releases 下载 Windows x64 ZIP，解压整个文件夹。保留里面的许可证文件，然后运行 `anki-grip.exe`。不需要安装 Python。
@@ -45,6 +49,10 @@
 肩键或扳机也可以和其它支持的输入组成组合键。
 
 实时手柄图会显示按键、摇杆位置和扳机按下的深度。打开“手柄测试”会显示放大视图，测试期间 Anki 操作会暂停。标准 XInput 不会报告 Xbox/Guide 键、Share 键或独立背键。
+
+![手柄测试页：按键高亮、摇杆位置与扳机深度](docs/images/controller-test-zh-CN.png)
+
+*放大的手柄测试视图：按键高亮、摇杆位置和扳机深度一目了然。*
 
 ## 兼容性与隐私
 

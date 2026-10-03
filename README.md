@@ -8,6 +8,10 @@ Review Anki cards with an Xbox controller. anki-grip connects an XInput controll
 
 Version 1.5.0 is the first public binary release. It comes as a complete Windows x64 ZIP that includes licenses, runtime metadata and SHA-256 checksums.
 
+![Mappings: Anki review actions and live controller status](docs/images/mappings-en.png)
+
+*Mappings with the live controller view in the sidebar. Screenshots show the Windows app with demonstration inputs.*
+
 ## Get started
 
 1. Download the Windows x64 ZIP from Releases and extract the whole folder. Keep the license files next to `anki-grip.exe`, then run it. You don't need Python.
@@ -47,6 +51,10 @@ You can customize all 24 standard XInput inputs:
 You can also combine a bumper or trigger with another supported input.
 
 The live controller view shows button presses, stick positions and how far each trigger is pulled. Controller Test opens a larger view and pauses Anki actions while it is open. Standard XInput doesn't report the Xbox/Guide button, the Share button or separate rear paddles.
+
+![Controller Test: highlighted buttons, stick positions and trigger travel](docs/images/controller-test-en.png)
+
+*The larger Controller Test view shows button presses, stick positions and trigger travel at a glance.*
 
 ## Compatibility and privacy
 
